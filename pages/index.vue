@@ -47,7 +47,7 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang="stylus">
 .card-footer-item
   color: green
 </style>
