@@ -2,16 +2,24 @@
 section.section
   .columns.is-mobile
     .column
-    .column(v-for='(trip, i) of trips', :key='i')
+    .column(v-for='(trip, i) of trips', :key='i' v-if='trip.departures.length')
       .card
         header.card-header
           p.card-header-title.has-text-grey
             | {{ trip.name }}
         .card-content
-          .content.has-text-centered
-            | description goes here
-        footer.card-footer
-          .card-footer-item(v-html='trip.name')
+          .content
+            p(v-for='dep in trip.departures')
+              | Date: {{ dep.date }}
+              br
+              | Ship: {{ dep.ship.name }}
+              br
+              | Reverse: {{ dep.reverse ? 'Yes' : 'No' }}
+              br
+              | Guaranteed: {{ dep.guaranteed || 'N/A' }}
+
+        //- footer.card-footer
+        //-   .card-footer-item(v-html='trip.name')
   pre trips = {{ trips }}
 </template>
 
@@ -20,14 +28,31 @@ import axios from 'axios'
 
 export default {
   asyncData: ({ error }) ->
-    # { data } = await axios.get process.env.TRIPS, { params: token: process.env.TOKEN } 
-    url = "#{process.env.TRIPS}?token=#{process.env.TOKEN}"
-    data = JSON.stringify
-      sort: _created: -1
-      # populate: 1
-      # filter: published: true
-    config = headers: 'Content-Type': 'application/json'
-    { data} = await axios.post url, data, config
-    return { trips: data.entries }
+    url = 'https://graphql.datocms.com'
+
+    body = JSON.stringify query: """
+      query {
+        allTrips {
+          name
+          departures {
+            date
+            reverse
+            guaranteed
+            ship {
+              name
+            }
+          }
+        }
+      }
+      """
+
+    headers =
+      'Authorization': process.env.TOKEN
+      'Content-Type': 'application/json'
+      'Accept': 'application/json'
+
+    { data }  = await axios.post url, body, { headers }
+
+    return { trips: data.data.allTrips }
 }
 </script>
