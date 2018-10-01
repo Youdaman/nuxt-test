@@ -47,7 +47,7 @@ export default {
       """
 
     headers =
-      'Authorization': process.env.TOKEN
+      'Authorization': process.env.DATO_API_TOKEN
       'Content-Type': 'application/json'
       'Accept': 'application/json'
 
