@@ -2,52 +2,32 @@
 section.section
   .columns.is-mobile
     .column
-       logo
-    .column(v-for='(feature, i) of features', :key='i')
+    .column(v-for='(trip, i) of trips', :key='i')
       .card
         header.card-header
           p.card-header-title.has-text-grey
-            | {{ feature.title }}
+            | {{ trip.name }}
         .card-content
           .content.has-text-centered
-            b-icon(:icon='feature.icon', size='is-large', type='is-primary')
+            | description goes here
         footer.card-footer
-          .card-footer-item(v-html='feature.content')
+          .card-footer-item(v-html='trip.name')
+  pre trips = {{ trips }}
 </template>
 
 <script lang="coffee">
-import Logo from '~/components/Logo.vue'
+import axios from 'axios'
 
 export default {
-  name: 'HomePage'
-  components: { Logo }
-  data: ->
-    features: [
-      {
-        icon: 'github-circle'
-        title: 'Free'
-        content: '<span>Open source on <a href="https://github.com/buefy/buefy"> GitHub</a></span>'
-      }
-      {
-        icon: 'cellphone-link'
-        title: 'Responsive'
-        content: '<span><b class="has-text-grey">Every</b> component is responsive</span>'
-      }
-      {
-        icon: 'alert-decagram'
-        title: 'Modern'
-        content: '<span>Built with <a href="https://vuejs.org/">Vue.js</a> and <a href="http://bulma.io/">Bulma</a></span>'
-      }
-      {
-        icon: 'arrange-bring-to-front'
-        title: 'Lightweight'
-        content: '<span>No other internal dependency</span>'
-      }
-    ]
+  asyncData: ({ error }) ->
+    # { data } = await axios.get process.env.TRIPS, { params: token: process.env.TOKEN } 
+    url = "#{process.env.TRIPS}?token=#{process.env.TOKEN}"
+    data = JSON.stringify
+      sort: _created: -1
+      # populate: 1
+      # filter: published: true
+    config = headers: 'Content-Type': 'application/json'
+    { data} = await axios.post url, data, config
+    return { trips: data.entries }
 }
 </script>
-
-<style lang="stylus">
-.card-footer-item
-  color: green
-</style>
