@@ -27,6 +27,9 @@ section.section
 import axios from 'axios'
 
 export default {
+  # created: ->
+  #   posts = (await axios.get('http://dev.moodle.com/wp-json/wp/v2/posts')).data
+  #   console.log('created', posts)
   asyncData: ({ error }) ->
     url = 'https://graphql.datocms.com'
 

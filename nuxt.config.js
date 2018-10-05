@@ -45,7 +45,43 @@ module.exports = {
     '@nuxtjs/axios',
     // Doc: https://buefy.github.io/#/documentation
     'nuxt-buefy',
-    '~/modules/coffeescript'
+    '~/modules/coffeescript',
+    '@nuxtjs/feed'
+  ],
+  feed: [
+    // A default feed configuration object
+    {
+      path: '/feed.xml', // The route to your feed.
+      async create (feed) {
+        feed.options = {
+          title: 'My blog',
+          link: 'https://testing/feed.xml',
+          description: 'This is my personal feed!',
+        }
+      
+        const axios = require('axios')
+        const posts = (await axios.get('http://moodle.com/wp-json/wp/v2/posts')).data
+        posts.forEach(post => {
+          feed.addItem({
+            title: post.title.rendered,
+            id: post.id,
+            link: post.link,
+            description: post.excerpt.rendered,
+            // content: post.content.rendered
+          })
+        })
+      
+        feed.addCategory('Nuxt.js')
+      
+        feed.addContributor({
+          name: 'Alexander Lichter',
+          email: 'example@lichter.io',
+          link: 'https://lichter.io/'
+        })
+      }, // The create function (see below)
+      cacheTime: 1000 * 60 * 15, // How long should the feed be cached
+      type: 'rss2' // Can be: rss2, atom1, json1
+    }
   ],
   /*
   ** Axios module configuration
