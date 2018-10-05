@@ -16,9 +16,7 @@
     "cross-env": "^5.2.0",
     "dotenv": "^6.0.0",
     "nuxt": "^2.0.0",
-    "nuxt-buefy": "^0.2.1",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.2"
+    "nuxt-buefy": "^0.2.1"
   },
   "devDependencies": {
     "coffee-loader": "^0.9.0",
@@ -27,6 +25,8 @@
     "nodemon": "^1.11.0",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
-    "sass-loader": "^7.1.0"
+    "sass-loader": "^7.1.0",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2"
   }
 }
